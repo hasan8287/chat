@@ -13,6 +13,7 @@ userController.insertData = async (request, reply) => {
       nama: 'fuad',
       set: 'hasan',
     });
+    // console.log('request : ', request.payload)
     return reply.response({}).code(200);
   } catch (error) {
     return error;
