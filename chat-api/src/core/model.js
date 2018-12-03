@@ -8,8 +8,8 @@ class ModelFirebase {
     this.refRoot = refRoot;
   }
 
-  insert(data) {
-    const id = uuid();
+  insert(data, idCustome = false) {
+    const id = (idCustome) ? idCustome : uuid();
     return db.ref(`${this.refRoot}/${id}`)
       .set(data, (error) => {
         if (error) return error;
@@ -23,6 +23,22 @@ class ModelFirebase {
         if (error) return error;
         return Object.assign(data, { id });
       });
+  }
+
+  getData() {
+    return new Promise((resolve, reject) => {
+      db.ref(this.refRoot).on('value', function (snapshot) {
+        resolve(snapshot.val());
+      }, function (errorObject) {
+        reject(errorObject);
+      })
+    });
+  }
+
+  removeData(link) {
+    return db.ref(`${this.refRoot}/${link}`).remove()
+      .then(() => link )
+      .catch(err => err);
   }
 }
 
